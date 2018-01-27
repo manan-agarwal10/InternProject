@@ -30,6 +30,7 @@ public class ApplicationObjectService {
 	}
 	
 
+	
 	@RequestMapping(value = "/removeObj", method = RequestMethod.PUT)
 	public @ResponseBody void deleteApplicationObject(@RequestBody int objid) {
 		ApplicationObjectDao.delete(objid);
