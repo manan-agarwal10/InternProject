@@ -4,8 +4,10 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 
+import org.accolite.ACL.database.AESCrypt;
 import org.accolite.ACL.database.DatabaseConnection;
 import org.accolite.ACL.model.Admin;
+import org.accolite.ACL.model.User;
 
 public class AdminDao {
 	private static AdminDao myAdminDao;
@@ -28,7 +30,7 @@ public class AdminDao {
 			System.out.println(sql);
 			PreparedStatement stmt = conn.prepareStatement(sql);
 			stmt.setString(1, ad.getAdminName());
-			stmt.setString(2,ad.getAdminPassword());
+			stmt.setString(2,AESCrypt.encrypt(ad.getAdminPassword()));
 			ResultSet rs = stmt.executeQuery();
 			if (!rs.isBeforeFirst()) {
 				System.out.println("NoData");
@@ -45,5 +47,15 @@ public class AdminDao {
 		return res;
 	}
 	
-	
+	public static void save(Admin ad) {
+		String sql = "insert into Admin (AdminName,AdminPassword) values(?,?)";
+		try (Connection conn = DatabaseConnection.getConnection();
+			PreparedStatement stmt = conn.prepareStatement(sql);) {
+			stmt.setString(1, ad.getAdminName());
+			stmt.setString(2, AESCrypt.encrypt(ad.getAdminPassword()));
+			stmt.executeUpdate();
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+	}	
 }

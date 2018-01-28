@@ -36,8 +36,9 @@ public class ApplicationObjectService {
 		ApplicationObjectDao.delete(objid);
 	}
 	
-	@RequestMapping(value = "/getAllObj", method = RequestMethod.GET)
+	@RequestMapping(value = "/getAllObj", method = RequestMethod.POST)
 	public @ResponseBody List<ApplicationObject>  getAllObject(@RequestBody Application app) {
+		System.out.println("Service check"+app.getApplicationId());
 		return ApplicationObjectDao.getObjectByApplication(app);
 	}
 }

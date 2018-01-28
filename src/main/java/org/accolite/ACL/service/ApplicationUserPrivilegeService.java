@@ -19,15 +19,9 @@ import org.springframework.web.bind.annotation.ResponseBody;
 public class ApplicationUserPrivilegeService {
 
 	@RequestMapping(value = "/addUserPri", method = RequestMethod.POST) 
-	public @ResponseBody ApplicationUserPrivilege addAppUserPrivilege(@RequestBody Map<String,String> aMap) 
+	public @ResponseBody String addAppUserPrivilege(@RequestBody Map<String,String> aMap) 
 	{
-		ApplicationUserPrivilege aup=new ApplicationUserPrivilege();
-		aup.setApplicationId(Integer.parseInt(aMap.get("applicationId")));
-		aup.setUserId(Integer.parseInt(aMap.get("userId")));
-		Privilege p=new Privilege(Boolean.parseBoolean(aMap.get("View")),Boolean.parseBoolean(aMap.get("Edit")));
-		aup.setPrivilege(p);
-		return aup;
-		
+		return ApplicationUserPrivilegeDao.addApplicationUserPrivilege(aMap);	
 	}
 	
 	@RequestMapping(value = "/showAppUser", method = RequestMethod.GET) 

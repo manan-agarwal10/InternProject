@@ -56,14 +56,6 @@ constraint fk_obj_paa foreign key (PrivilegeId) references Privilege(PrivilegeId
 
 );
 
-
-Create table Role(
-RoleUserId int primary key,
-RoleId int,
-UserId int,
-PrivilegeId int
-);
-
 show databases;
 
 desc application;
@@ -247,7 +239,11 @@ where
 	and ao.applicationobjectId=1 
 	and aoup.UserId=1;
     
-    
-    
+select * from users;
+Delete from users where userid=1;
+ use acl;
+ 
 select * from applicationObject;
 insert into applicationObject (ApplicationId,ObjectPath) values(1,"/more.html");
+
+select * from ApplicationObject where ApplicationId=1;

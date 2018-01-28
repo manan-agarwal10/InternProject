@@ -22,9 +22,8 @@ public class UserService {
 		return u;
 	}
 	
-	@RequestMapping(value = "/viewUsers", method = RequestMethod.POST)
-	public @ResponseBody List<User> viewUser(@RequestBody User u) {
-		System.out.println(u.getUserId() + u.getUserName() + u.getUserPassword());
+	@RequestMapping(value = "/viewUsers", method = RequestMethod.GET)
+	public @ResponseBody List<User> viewUser() {
 		return UserDao.getAllUsers();
 	}
 	

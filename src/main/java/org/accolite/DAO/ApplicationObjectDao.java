@@ -51,6 +51,7 @@ public class ApplicationObjectDao {
 					ao.setApplicationId(rs.getInt(2));
 					ao.setApplicationObjectId(rs.getInt(1));
 					ao.setObjectPath(rs.getString(3));
+					lapp.add(ao);
 				}
 			}
 		} catch (Exception e) {

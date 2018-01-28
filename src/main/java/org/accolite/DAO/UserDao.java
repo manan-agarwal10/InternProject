@@ -19,7 +19,7 @@ public class UserDao {
 	}
 
 	public static void save(User u) {
-		String sql = "insert into Privilege (Username,Passwrd) values(?,?)";
+		String sql = "insert into Users (Username,UserPassword) values(?,?)";
 		try (Connection conn = DatabaseConnection.getConnection();
 			PreparedStatement stmt = conn.prepareStatement(sql);) {
 			stmt.setString(1, u.getUserName());
