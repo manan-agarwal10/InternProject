@@ -1,0 +1,641 @@
+<html>
+<head>
+
+<link rel="stylesheet" href="main.css" >
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+<script src="http://ajax.googleapis.com/ajax/libs/angularjs/1.0.4/angular.js">
+    </script>
+<title>ACL</title>
+
+<script >
+
+var app = angular.module('ACLMaster',[]);
+
+app.controller('ACLMasterController', function($scope,$http){
+
+$scope.applicationShow =  false;
+$scope.objectShow =  false;
+$scope.userShow =  false;
+$scope.privilegeShow =  false;
+$scope.roleShow =  false;
+$scope.IsVisible =  false;
+$scope.PrivilegeShow = false;
+$scope.UserPrivilegeShow = false;
+$scope.UserObjectPrivilegeShow=false;
+
+$scope.application =  function() {
+$scope.applicationShow =  true;
+$scope.objectShow =  false;
+$scope.userShow =  false;
+$scope.privilegeShow =  false;
+$scope.roleShow =  false;
+$scope.IsVisible =  false;
+$scope.PrivilegeShow = false;
+alert("clickedApplication");
+$scope.ShowApplication();
+}
+
+
+
+$scope.object =  function() {
+$scope.applicationShow =  false;
+$scope.objectShow =  true;
+$scope.userShow =  false;
+$scope.privilegeShow =  false;
+$scope.roleShow =  false;
+$scope.IsVisible =  false;
+$scope.PrivilegeShow = false;
+
+alert("clickedObject");
+$scope.ShowApplication();
+}
+
+
+
+$scope.user =  function() {
+$scope.applicationShow =  false;
+$scope.objectShow =  false;
+$scope.userShow =  true;
+$scope.privilegeShow =  false;
+$scope.roleShow =  false;
+$scope.IsVisible =  false;
+$scope.PrivilegeShow = false;
+alert("clicked User");
+$scope.ShowApplication();
+$scope.ShowAllUser();
+
+}
+
+
+
+$scope.privilege =  function() {
+$scope.applicationShow =  false;
+$scope.objectShow =  false;
+$scope.userShow =  false;
+$scope.privilegeShow =  true;
+$scope.roleShow =  false;
+$scope.IsVisible =  false;
+$scope.PrivilegeShow = false;
+alert("clicked Privilege");
+$scope.ShowApplication();
+}
+
+
+$scope.role =  function() {
+$scope.applicationShow =  false;
+$scope.objectShow =  false;
+$scope.userShow =  false;
+$scope.privilegeShow =  false;
+$scope.roleShow =  true;
+$scope.IsVisible =  false;
+$scope.PrivilegeShow = false;
+alert("clicked Role");
+}
+
+$scope.AddApplication = function(){
+
+
+var AddApp = {
+ method: 'POST',
+ url: 'http://localhost:8080/AccessControlListService/addApp' , 
+
+
+data: { applicationId: null , applicationName : $scope.applicationName }
+}
+console.log($scope.applicationName);
+
+$http(AddApp).then(function(response){
+//console.log(response.data.applicationId);
+if(response.data=="Successfull")
+alert( $scope.applicationName +" is succcesfully added" );
+$scope.applicationName="";
+$scope.ShowApplication();
+
+}, 
+function(){
+console.log("error")
+alert("sorry not added");
+
+});
+
+}
+
+
+$scope.AddObject = function(){
+
+
+var AddObj = {
+ method: 'POST',
+ url: 'http://localhost:8080/AccessControlListService/addObj' , 
+
+
+data: { applicationObjectId : null , applicationId: $scope.selectedApplicationId.applicationId ,  objectPath : $scope.objectName , lastModifiedDate:null }
+}
+
+console.log($scope.selectedApplicationId.applicationId);
+
+$http(AddObj).then(function(response){
+
+alert( $scope.objectName +" is succcesfully added" );
+if($scope.IsVisible==true)
+$scope.ShowObject();
+
+$scope.objectName="";
+}, 
+function(){
+console.log("error")
+alert("sorry not added");
+
+});
+
+}
+
+
+
+
+$scope.AddUser = function(){
+
+
+var AddUser = {
+ method: 'POST',
+ url: 'http://localhost:8080/AccessControlListService/addUserPri' , 
+
+
+data: {  applicationId: $scope.selectedApplicationId.applicationId.toString() ,   userId : $scope.userId.toString() , view:$scope.privilegeView.toString() ,edit:$scope.privilegeEdit.toString() }
+}
+console.log($scope.privilegeView+" " + $scope.selectedApplicationId.applicationId);
+//console.log($scope.selectedApplicationId.applicationId);
+
+$http(AddUser).then(function(response){
+
+alert( $scope.userId +" is succcesfully added");
+if($scope.PrivilegeShow ==true)
+$scope.ShowUser();
+
+$scope.userId="";
+}, 
+function(){
+console.log("error")
+alert("sorry not added");
+
+});
+
+}
+
+
+
+$scope.AddUserObjectPrivilege= function(){
+
+
+var AddUserObjectPrivilege = {
+ method: 'POST',
+ url: 'http://localhost:8080/AccessControlListService/addObjUserPri' , 
+
+
+data: {   applicationObjectId:$scope.selectedApplicationObjectId.applicationObjectId.toString(),  userId : $scope.selectedApplicationUserId.userId.toString() , view:$scope.privilegeViewObj.toString() ,edit:$scope.privilegeEditObj.toString() }
+}
+console.log($scope.privilegeView+" " + $scope.selectedApplicationId.applicationId);
+//console.log($scope.selectedApplicationId.applicationId);
+
+$http(AddUserObjectPrivilege).then(function(response){
+
+alert( "Privilege is succcesfully added");
+$scope.privilegeEditObj="";
+$scope.privilegeViewObj="";
+
+
+}, 
+function(){
+console.log("error")
+alert("sorry not added");
+
+});
+
+}
+
+
+$scope.ShowApplication = function(){
+
+var ShowApp = {
+ method: 'GET',
+ url: 'http://localhost:8080/AccessControlListService/getAllApp' , 
+//data: { applicationId: null , applicationName : null }
+
+
+}
+console.log($scope.applicationName);
+$http(ShowApp).then(function(response){
+
+//var data = { applicationId: null , applicationName : $scope.applicationName }
+
+$scope.listApplication = response.data;
+console.log(response.data);
+
+
+}, 
+function(){
+console.log("error")
+$scope.listApplication = ["rajat","batra"];
+alert("sorry not added");
+
+});
+
+}
+
+
+$scope.ShowObject = function(){
+
+var ShowObj = {
+ method: 'POST',
+ url: 'http://localhost:8080/AccessControlListService/getAllObj' , 
+data: { applicationId: $scope.selectedApplicationId.applicationId.toString() , applicationName : null}
+
+
+}
+//console.log($scope.applicationName);
+$http(ShowObj).then(function(response){
+
+//var data = { applicationId: null , applicationName : $scope.applicationName }
+
+$scope.listApplicationObject = response.data;
+$scope.IsVisible=true;
+console.log(response.data);
+
+
+
+}, 
+function(){
+console.log("error")
+$scope.listApplication = ["rajat","batra"];
+alert("sorry not added");
+
+});
+
+}
+
+
+
+
+
+$scope.ShowUser = function(){
+
+var ShowUser = {
+ method: 'POST',
+ url: 'http://localhost:8080/AccessControlListService/showAppUser' , 
+data: { applicationId: $scope.selectedApplicationId.applicationId.toString() , applicationName : $scope.selectedApplicationName}
+
+
+}
+//console.log($scope.applicationName);
+$http(ShowUser).then(function(response){
+
+//var data = { applicationId: null , applicationName : $scope.applicationName }
+
+$scope.listApplicationObjectUser = response.data;
+$scope.UserPrivilegeShow = true;
+console.log(response.data);
+
+
+}, 
+function(){
+console.log("error")
+$scope.listApplication = ["rajat","batra"];
+alert("sorry not added");
+
+});
+
+}
+
+
+$scope.ShowAllUser = function(){
+
+var ShowUsers = {
+ method: 'GET',
+ url: 'http://localhost:8080/AccessControlListService/viewUsers' , 
+
+
+
+}
+//console.log($scope.applicationName);
+$http(ShowUsers).then(function(response){
+$scope.PrivilegeShow=true;
+//var data = { applicationId: null , applicationName : $scope.applicationName }
+
+$scope.listAllUsers = response.data;
+console.log(response.data);
+
+
+}, 
+function(){
+console.log("error")
+$scope.listApplication = ["rajat","batra"];
+alert("sorry not added");
+
+});
+
+}
+
+
+
+
+
+$scope.ShowPrivilegeUserObject = function(){
+
+var ShowUserObjectPrivilege = { 
+ method: 'POST',
+ url: 'http://localhost:8080/AccessControlListService/showAppUserObjPri' , 
+
+
+ data : { applicationId: $scope.selectedApplicationId.applicationId.toString(), userId : $scope.selectedApplicationUserId.userId.toString() , applicationObjectId:$scope.selectedApplicationObjectId.applicationObjectId.toString()}
+
+}
+//console.log($scope.applicationName);
+$http(ShowUserObjectPrivilege).then(function(response){
+$scope.UserObjectPrivilegeShow=true;
+
+$scope.listApplicationObjectUserPrivilege = response.data; 
+console.log(response.data);
+
+
+}, 
+function(){
+console.log("error")
+$scope.listApplication = ["rajat","batra"];
+alert("sorry not added");
+
+});
+
+}
+
+
+});
+
+</script>
+
+</head>
+
+
+
+<body ng-app="ACLMaster" ng-controller="ACLMasterController">
+<div>
+<ul>
+  <li><a ng-click="application()" >application</a></li>
+  <li><a ng-click="object()">Object</a></li>
+  <li><a ng-click="user()">User</a></li>
+  <li><a ng-click="privilege()">Privilege</a></li>
+  <li><a ng-click="role()">Role</a></li>
+
+</ul>
+</div>
+
+<div ng-show=applicationShow  style="width:800px;background-color: #9DC26F; margin:100 auto; padding: 25px 50px 75px 100px; border: 2px solid ">
+
+<label>Add New Application: </label><br>
+
+<p>Name of Application : <input type="text" ng-model="applicationName" > 
+<input type="button" ng-click="AddApplication()" value="Add Application"></p><br>
+
+<label>Show Applications :</label>
+
+
+
+ 
+    <table cellpadding="0" cellspacing="0" ng-show=true border="1">
+            <tr>
+                <th>ApplicationId</th>
+                <th>ApplicationName</th>
+               
+            </tr>
+            <tbody ng-repeat="x in listApplication">
+                <tr>
+                    <td>{{x.applicationId}}</td>
+                    <td>{{x.applicationName}}</td>
+                    
+                </tr>
+            </tbody>
+        </table>
+
+</div>
+
+
+
+<div ng-show=objectShow  style="width:800px;background-color: #9DC26F; margin:100 auto; padding: 25px 50px 75px 100px; border: 2px solid ">
+
+
+<label>ShowApplication</label>
+
+
+
+<select ng-model="selectedApplicationId" ng-options=" +  (x.applicationId+'&nbsp;'+x.applicationName) for x in listApplication">
+</select>
+
+<select ng-model="selectedApplicationName" ng-options="x.applicationName for x in listApplication" ng-hide=true>
+</select>
+
+<input type="button" ng-click="ShowObject()" value="Show objects"><br>
+
+
+
+
+
+  <table cellpadding="4" cellspacing="4"border="1" >
+            <tr ng-show="IsVisible" >
+                <th>ObjectId</th>
+                <th>ObjectPath</th>
+               
+            </tr>
+            <tbody ng-repeat="x in listApplicationObject">
+                <tr>
+                    <td>{{x.applicationObjectId}}</td>
+                    <td>{{x.objectPath}}</td>
+                    
+                </tr>
+            </tbody>
+        </table><br><br>
+
+
+
+<label>Add New Objects: </label><br>
+
+Name of object : <input type="text" ng-model="objectName"> 
+<input type="button" ng-click="AddObject()" value="Add Object"><br><br>
+
+
+
+
+
+
+</div>
+
+
+
+
+
+
+
+
+
+
+<div ng-show=userShow  style="width:1000px;background-color: #9DC26F; margin:100 auto; padding: 25px 50px 75px 100px; border: 2px solid ">
+
+
+<label>Show Applications</label>
+
+
+<select ng-model="selectedApplicationId" ng-options="(x.applicationId+'&nbsp;'+x.applicationName) for x in listApplication">
+</select>
+
+<select ng-model="selectedApplicationName" ng-options="x.applicationName for x in listApplication" ng-hide=true>
+</select>
+
+
+<input type="button" ng-click="ShowAllUser()" value="Show Users"><br>
+
+
+
+
+<table cellpadding="0" cellspacing="0" ng-show=PrivilegeShow border="1">
+            <tr>
+                <th>UserId</th>
+                <th>UserName</th>
+				
+               
+            </tr>
+            <tbody ng-repeat="x in listAllUsers">
+                <tr>
+                    <td>{{x.userId}}</td>
+                    <td>{{x.userName }}</td>
+				
+                    
+                </tr>
+            </tbody>
+        </table>
+
+<label>Add New Users with privilege: </label><br>
+
+Id of user : <input type="text" ng-model="userId"> <br><br>
+
+privilege to user : view <input type="checkbox" ng-model="privilegeView" value="checked" >
+edit <input type="checkbox" ng-model="privilegeEdit" checked > 
+
+<input type="button" ng-click="AddUser()" value="Add User-Privilege"><br>
+
+
+<input type="button" ng-click="ShowUser()" value="Show Users with privilege"><br>
+
+<table cellpadding="0" cellspacing="0" ng-show=UserPrivilegeShow border="1">
+            <tr>
+                <th>UserId</th>
+                <th>Privilege-View</th>
+				<th>Privilege-Edit</th>
+				
+               
+            </tr>
+            <tbody ng-repeat="x in listApplicationObjectUser">
+                <tr>
+                    <td>{{x.userId}}</td>
+                    <td>{{x.privilege.view }}</td>
+					<td>{{x.privilege.edit }}</td>
+				
+                    
+                </tr>
+            </tbody>
+        </table>
+<br><br>
+
+
+</div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div ng-show=privilegeShow  style="width:1000px;background-color: #9DC26F; margin:100 auto; padding: 25px 50px 75px 100px; border: 2px solid ">
+
+
+
+<label>ShowApplication</label>
+
+
+
+<select ng-model="selectedApplicationId" ng-options="   (x.applicationId+'&nbsp;'+x.applicationName) for x in listApplication">
+</select>
+
+<select ng-model="selectedApplicationName" ng-options="x.applicationName for x in listApplication" ng-hide=true>
+</select>
+
+<br>
+<label>Show users :</label>
+<input type="button" ng-click="ShowUser()" value="Show Users">
+
+
+<select ng-model="selectedApplicationUserId" ng-options="x.userId for x in listApplicationObjectUser">
+</select>
+
+<select ng-model="selectedPrivilege" ng-options="x.privilege.view for x in listApplicationObjectUser" ng-hide=true>
+
+</select>
+
+<select ng-model="selectedPrivilege" ng-options="x.privilege.edit for x in listApplicationObjectUser" ng-hide=true>
+
+</select><br><br>
+<label>Show Objects :</label>
+<input type="button" ng-click="ShowObject()" value="Show objects">
+
+
+<select ng-model="selectedApplicationObjectId" ng-options=" x.applicationObjectId +'&nbsp;'+ x.objectPath for x in listApplicationObject">
+</select>
+
+<select ng-model="selectedObjectPath" ng-options="x.objectPath for x in listApplicationObject" ng-hide=true>
+
+</select>
+<br><br>
+
+
+privilege  : view <input type="checkbox" ng-model="privilegeViewObj" >
+edit <input type="checkbox" ng-model="privilegeEditObj" checked > 
+
+<input type="button" ng-click="AddUserObjectPrivilege()" value="Add Privilege"><br>
+
+
+
+
+
+<input type="button" ng-click="ShowPrivilegeUserObject()" value="Show Users with privilege"><br>
+
+<table cellpadding="5" cellspacing="" ng-show=UserObjectPrivilegeShow border="1">
+            <tr>
+                
+                <th>Privilege-View</th>
+				<th>Privilege-Edit</th>
+				
+               
+            </tr>
+            
+                <tr>
+                     <td>{{listApplicationObjectUserPrivilege.view}}</td>
+                    <td>{{listApplicationObjectUserPrivilege.edit}}</td>
+					
+				
+                    
+                </tr>
+            
+        </table>
+
+
+
+</div>
+
+</body>
+</html>
+

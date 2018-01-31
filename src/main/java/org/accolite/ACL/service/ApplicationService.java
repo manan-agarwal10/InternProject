@@ -3,15 +3,8 @@ package org.accolite.ACL.service;
 
 import java.util.List;
 
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpSession;
-
-import org.accolite.ACL.database.ApplicationDatabase;
+import org.accolite.ACL.DAO.ApplicationDao;
 import org.accolite.ACL.model.Application;
-import org.accolite.ACL.model.ApplicationUserPrivilege;
-import org.accolite.DAO.ApplicationDao;
-import org.accolite.DAO.ApplicationUserPrivilegeDao;
-import org.springframework.http.MediaType;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -21,8 +14,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 @Controller
 public class ApplicationService {
 
-	public ApplicationService() {
-	}
+	
 	
 	@RequestMapping(value = "/addApp", method = RequestMethod.POST) 
 	 public @ResponseBody String addApplication(@RequestBody Application app) {
@@ -32,9 +24,9 @@ public class ApplicationService {
 	 }
 	
 	@RequestMapping(value = "/removeApp", method = RequestMethod.PUT)
-	public void  removeApplication(@RequestBody int app) {
-		  System.out.println(app);
-		  ApplicationDao.delete(app);
+	public void  removeApplication(@RequestBody String appName) {
+		  System.out.println(appName);
+		  ApplicationDao.delete(appName);
 		 }
 	
 	@RequestMapping(value = "/getAllApp", method = RequestMethod.GET)

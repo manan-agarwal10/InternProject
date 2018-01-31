@@ -1,7 +1,5 @@
 package org.accolite.ACL.model;
 
-import javax.annotation.Generated;
-
 import org.springframework.beans.factory.annotation.Autowired;
 
 public class Privilege {

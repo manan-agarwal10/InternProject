@@ -1,6 +1,7 @@
 package org.accolite.ACL.database;
 
-import java.sql.*;
+import java.sql.Connection;
+import java.sql.DriverManager;
 
 public class DatabaseConnection {
 
@@ -14,7 +15,7 @@ public class DatabaseConnection {
 	   public static Connection getConnection() {
 	   Connection conn = null;
 	   try{
-	      Class.forName("com.mysql.jdbc.Driver");
+	      Class.forName(JDBC_DRIVER);
 
 	      
 	      System.out.println("Connecting to database...");

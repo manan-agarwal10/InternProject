@@ -1,9 +1,10 @@
 package org.accolite.ACL.database;
 
 import java.security.Key;
+import java.util.Base64;
+
 import javax.crypto.Cipher;
 import javax.crypto.spec.SecretKeySpec;
-import java.util.Base64;
 public class AESCrypt 
 {
 	private AESCrypt() 
@@ -33,7 +34,7 @@ public class AESCrypt
         
     }
     
-    private static Key generateKey() throws Exception 
+    private static Key generateKey() 
     {
         return new SecretKeySpec(AESCrypt.KEY.getBytes(),AESCrypt.ALGORITHM);
     }

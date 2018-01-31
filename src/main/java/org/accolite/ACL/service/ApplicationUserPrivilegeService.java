@@ -4,11 +4,9 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import org.accolite.ACL.DAO.ApplicationUserPrivilegeDao;
 import org.accolite.ACL.model.ApplicationUserPrivilege;
 import org.accolite.ACL.model.Privilege;
-import org.accolite.ACL.model.User;
-import org.accolite.DAO.ApplicationUserObjectPrivilegeDao;
-import org.accolite.DAO.ApplicationUserPrivilegeDao;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -19,26 +17,22 @@ import org.springframework.web.bind.annotation.ResponseBody;
 public class ApplicationUserPrivilegeService {
 
 	@RequestMapping(value = "/addUserPri", method = RequestMethod.POST) 
-	public @ResponseBody String addAppUserPrivilege(@RequestBody Map<String,String> aMap) 
+	public @ResponseBody String addAppUserPrivilege(@RequestBody HashMap<String,String> aMap) 
 	{
+		System.out.println(""+aMap);
 		return ApplicationUserPrivilegeDao.addApplicationUserPrivilege(aMap);	
 	}
 	
-	@RequestMapping(value = "/showAppUser", method = RequestMethod.GET) 
-	public @ResponseBody List<User> viewAppUser(@RequestBody Map<String,String> aMap) 
+	@RequestMapping(value = "/showAppUser", method = RequestMethod.POST) 
+	public @ResponseBody List<ApplicationUserPrivilege> viewAppUser(@RequestBody Map<String,String> aMap) 
 	{
 		return ApplicationUserPrivilegeDao.getUsersByApplication(Integer.parseInt(aMap.get("applicationId")));
 	}
 	
-	@RequestMapping(value = "/showUserPri", method = RequestMethod.GET) 
+	@RequestMapping(value = "/showUserPri", method = RequestMethod.POST) 
 	public @ResponseBody Privilege viewAppUserPrivilege(@RequestBody Map<String,String> aMap) 
 	{
 		return ApplicationUserPrivilegeDao.getUserPrivilegeByApplication(Integer.parseInt(aMap.get("applicationId")),Integer.parseInt(aMap.get("UserId")));
 	}
-	
-	//Show user
-	//To return map
-	//Request Application
-	//Return UserName,Privilege
 	
 }

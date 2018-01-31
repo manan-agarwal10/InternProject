@@ -27,8 +27,8 @@ default value of this is update
 none is same as not assigning which is default -->
 
 
-<mapping class="org.accolite.ACL.model.Admin" />
-<mapping class="org.accolite.ACL.model.Application" />
+<mapping class="org.accolite.model.Admin" />
+<mapping class="org.accolite.model.Application" />
 
 
 

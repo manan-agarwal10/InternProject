@@ -2,14 +2,9 @@ package org.accolite.ACL.service;
 
 import java.util.List;
 
-import javax.servlet.http.HttpServletRequest;
-
+import org.accolite.ACL.DAO.ApplicationObjectDao;
 import org.accolite.ACL.model.Application;
 import org.accolite.ACL.model.ApplicationObject;
-import org.accolite.ACL.model.Privilege;
-import org.accolite.DAO.ApplicationDao;
-import org.accolite.DAO.ApplicationObjectDao;
-import org.accolite.DAO.PrivilegeDao;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -24,21 +19,25 @@ public class ApplicationObjectService {
 	}
 
 	@RequestMapping(value = "/addObj", method = RequestMethod.POST)
-	public @ResponseBody ApplicationObject addObject(@RequestBody ApplicationObject ao) {
-		ApplicationObjectDao.save(ao);
-		return ao;
+	public @ResponseBody String addObject(@RequestBody ApplicationObject ao) {
+		return ApplicationObjectDao.save(ao);
 	}
 	
 
 	
 	@RequestMapping(value = "/removeObj", method = RequestMethod.PUT)
-	public @ResponseBody void deleteApplicationObject(@RequestBody int objid) {
-		ApplicationObjectDao.delete(objid);
+	public @ResponseBody String deleteApplicationObject(@RequestBody int objid) {
+		return ApplicationObjectDao.delete(objid);
 	}
+	
+	@RequestMapping(value = "/removeObjByName", method = RequestMethod.PUT)
+	public @ResponseBody String deleteApplicationObject(@RequestBody String objPath) {
+		return ApplicationObjectDao.delete(objPath);
+	}
+	
 	
 	@RequestMapping(value = "/getAllObj", method = RequestMethod.POST)
 	public @ResponseBody List<ApplicationObject>  getAllObject(@RequestBody Application app) {
-		System.out.println("Service check"+app.getApplicationId());
 		return ApplicationObjectDao.getObjectByApplication(app);
 	}
 }

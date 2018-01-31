@@ -1,65 +1,79 @@
-<!DOCTYPE html>
-<html ng-app="appRegistration">
+<html>
 <head>
-  <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.6.4/angular.min.js"></script>
-  <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.6.4/angular-route.js"></script>
-  <script>
-  (function() {  
-	   var app = angular.module("appRegistration", []);
-	  app.controller("MainController",function($scope, $http) {
-	    
-		$scope.app1=
-		{
-			app_name:"",
-			admin_Id:""
-		};
-	  $scope.list = [];
-	  $scope.save = function() {
-	  var data ={
-		   "appId":1,
-		  "applicationName":$scope.app_name,
-	      "lastModifiedBy":1,
-	      "lastModifiedDate":null
-	  };
-	  console.log("https://localhost:8080/ACLProject/users/"+data);    
-	  var response = $http.post("http://localhost:8080/AccessControlListService/PostFormData",data);
-	  console.log(data);
-	  $scope.list.push(data);
-	  }; 
-	    
-	  });
-	    
-	})();
-  </script>
-</head>
-  <style>
-  th, td {
-    padding: 5px;
-    text-align: left;
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+<link rel="stylesheet" href="main.css" >
+
+<script src="http://ajax.googleapis.com/ajax/libs/angularjs/1.0.4/angular.js">
+    </script>
+<title>ACL</title>
+
+<script >
+
+var app = angular.module('ACL',[]);
+
+app.controller('ACLController', function($scope,$http,$window){
+
+$scope.login =  function()
+{
+console.log($scope.userName+" " + $scope.password);
+
+var req = {
+ method: 'POST',
+ url: 'http://localhost:8080/AccessControlListService/validateLogin' , 
+
+
+data: { adminId:null ,adminName: $scope.userName , adminPassword : $scope.password }
+}
+
+
+
+$http(req).then(function(response){
+
+ console.log("RRRR"+response.data);
+if(response.data === "true"){
+alert("login successful");
+ $window.location.href = "AdminPage.html";
+ }
+ else{
+  alert("sorry !! Wrong Credentials" );
+   $window.location.href = "index.jsp";
+
   }
-</style>
-<body ng-controller="MainController">
-  <div style="text-align: center;padding-bottom: 5% ;width: 80%;margin: 0 20% 0 20%;background-color:#BEBEBE;">
-  <header>
-    <h1> Registring Application Form</h1>
-  </header>
-    <form style="text-align: center;" name="registerApp" ng-submit="save()"  style="height:10%">
-      <div class="appName">
-	  <label class='appNameLabel'> Application Name</label>
-	  <input type="text" placeholder="Applicaion Name" id="app_name" required ng-model="app_name" />
-	  </div>
-	  <div class="adminId">
-	  <label class='adminIdLabel'> AdminId</label>
-	  <input type="text" placeholder="Admin Id" required id="admin_id" ng-model="admin_id" />
-	  </div>
-	  
-      <input type="submit" value="Submit">
-    </form>
-  </div>
 
-  <p>
-  	Form Data:{{list}}
-  </p>
+ 
+console.log($scope.password +" " + $scope.userName+" " +response.data.adminId)
+},
+ function(){
+ alert("sorry !! Wrong Credentials" );
+ console.log("error")
+ });
+
+}
+
+});
+
+</script>
+
+</head>
+
+
+
+<body ng-app="ACL" ng-controller="ACLController" style="background-color: #76b852;">
+<div style="width:600px;background-color: #9DC26F; margin:100 auto; padding: 50px 50px 50px 50px; border: 2px solid ">
+
+<label>UserName : <input type="text" id="text_user"  ng-model="userName"></label><br><br>
+
+
+<label>Password : <input type="password"   ng-model="password"></label><br><br>
+
+
+<input type="button" ng-click="login()" value ="login" style="width:270px;background-color:#00FF00"><br>
+
+
+</div>
+
+
+
 </body>
-
 </html>
+

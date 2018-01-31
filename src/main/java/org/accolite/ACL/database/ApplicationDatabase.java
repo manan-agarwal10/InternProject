@@ -4,30 +4,38 @@ import java.sql.Connection;
 import java.sql.*;
 
 import org.accolite.ACL.model.Application;
-import org.accolite.ACL.model.Privilege;
 
 public class ApplicationDatabase {
 
 	public ApplicationDatabase() {
 	}
 	
-		public void addPrivilege(Privilege p) 
+	public void addApplication(Application app)
 	{
-		DatabaseConnection dc=new DatabaseConnection();
-		Connection con=dc.getConnection();
-		try 
-		{
-			String sql="Insert into privilege(view,edit) values(?,?)";
-			PreparedStatement st=con.prepareStatement(sql);
-			st.setBoolean(1, p.getView());
-			st.setBoolean(2,p.getEdit());
-			st.executeUpdate();
-			con.close();
-		}
-		catch(Exception e) 
-		{
-			e.printStackTrace();
-		}
-	}
+		DatabaseConnection dc = new DatabaseConnection();
+		try {
+			Connection conn = dc.getConnection();
+
+		
+			String sql = "insert into application (app_name,last_modified_date,admin_id) values(?,?,?)";
+		System.out.println("1");
+		PreparedStatement stmt = conn.prepareStatement(sql);
+		stmt.setString(1,"rahul" );
+		Date d = new Date(System.currentTimeMillis());
+		
+		stmt.setDate(2, d);
+		stmt.setInt(3, 1);
+		System.out.println("2");
+		stmt.executeUpdate();
+		System.out.println("executed");
+		conn.close();
 	
+	
+	}
+		catch(Exception e)
+		{
+			System.out.println(e.getMessage());
+		}
+
+}
 }

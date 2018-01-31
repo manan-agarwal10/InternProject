@@ -1,5 +1,7 @@
 package org.accolite.ACL.model;
 
+import java.sql.Timestamp;
+
 public class Admin {
 
 	public Admin() {
@@ -10,6 +12,15 @@ public class Admin {
 
 	private String adminName;
 	private String adminPassword;
+	private Timestamp lastModifiedDate;
+
+	public Timestamp getLastModifiedDate() {
+		return lastModifiedDate;
+	}
+
+	public void setLastModifiedDate(Timestamp lastModifiedDate) {
+		this.lastModifiedDate = lastModifiedDate;
+	}
 
 	public String getAdminPassword() {
 		return adminPassword;
